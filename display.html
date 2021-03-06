@@ -1,0 +1,60 @@
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="display.css">
+
+    <title>Document</title>
+</head>
+
+<body>
+    <nav >
+
+        <ul class="mylist">
+            <li class="leftAlign">
+                <form action="">
+                    <Label class="white">Beginner</Label>
+                    <input type="radio" name="level" id="bgl">
+                    <Label class="white">intermediate</Label>
+                    <input type="radio" name="level" id="iml">
+                    <Label class="white">Advance</Label>
+                    <input type="radio" name="level" id="adl">
+                </form>
+            </li>
+            
+            <li class="white rightAlign">
+                Home
+            </li>
+            <li class="white rightAlign">
+                open source
+            </li>
+            <li class="white rightAlign">
+                about
+            </li>
+        </ul>
+    </nav>
+    <div class="center-pos">
+        <table>
+            <tr>
+                <td>Total Correct Answers </td>
+                <td id="correct-ans"> 0</td>
+            </tr>
+            <tr>
+                <td>Total Correct Wrong </td>
+                <td id="wrong-ans"> 0</td>
+            </tr>
+        </table>
+        <h2>Solve this question</h2>
+        <h1 id="question-id">3 - 3</h1>
+        <h2 id="timer">?</h2>
+        <h2 id="answer-display"> Find</h2> <img id="image-id" alt="answer"><br /><br />
+        <input id="answer-id" type="number" placeholder="write your answer here">
+        <input id="btn" type="submit" value="check">
+
+
+    </div>
+
+
+    <script src="display.js"></script>
+</body>
+
+</html>
