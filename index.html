@@ -1,58 +1,102 @@
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="display.css">
-
     <title>Document</title>
+    <style>
+        @media only screen and (max-width: 600px) {
+            /* Styles for mobile */
+            body {
+                font-size: 14px;
+            }
+            .mylist {
+                text-align: center;
+            }
+            .mylist li {
+                display: block;
+                margin-bottom: 10px;
+            }
+            .rightAlign {
+                text-align: center;
+            }
+            .center-pos {
+                text-align: center;
+            }
+            .center-pos table {
+                margin: 0 auto;
+            }
+            #answer-id {
+                width: 100%;
+            }
+        }
+        
+        @media only screen and (min-width: 601px) {
+            /* Styles for desktop */
+            body {
+                font-size: 16px;
+            }
+            .mylist {
+                text-align: left;
+            }
+            .mylist li {
+                display: inline-block;
+                margin-right: 10px;
+            }
+            .rightAlign {
+                text-align: right;
+            }
+            .center-pos {
+                text-align: center;
+            }
+            .center-pos table {
+                margin: 0 auto;
+            }
+            #answer-id {
+                width: auto;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <nav >
-
+    <nav>
         <ul class="mylist">
             <li class="leftAlign">
                 <form action="">
-                    <Label class="white">Beginner</Label>
-                    <input type="radio" name="level" id="bgl">
-                    <Label class="white">intermediate</Label>
-                    <input type="radio" name="level" id="iml">
-                    <Label class="white">Advance</Label>
-                    <input type="radio" name="level" id="adl">
+                    <label for="bgl" class="white">Beginner</label>
+                    <input type="radio" name="level" id="bgl" value="beginner">
+                    <label for="inl" class="white">Intermediate</label>
+                    <input type="radio" name="level" id="inl" value="intermediate">
+                    <label for="adl" class="white">Advanced</label>
+                    <input type="radio" name="level" id="adl" value="advanced">
                 </form>
             </li>
-            
-            <li class="white rightAlign">
-                Home
-            </li>
-            <li class="white rightAlign">
-                open source
-            </li>
-            <li class="white rightAlign">
-                about
-            </li>
+            <li class="white rightAlign">Home</li>
+            <li class="white rightAlign">Open Source</li>
+            <li class="white rightAlign">About</li>
         </ul>
     </nav>
     <div class="center-pos">
         <table>
             <tr>
-                <td>Total Correct Answers </td>
-                <td id="correct-ans"> 0</td>
+                <td>Total Correct Answers</td>
+                <td id="correct-ans">0</td>
             </tr>
             <tr>
-                <td>Total Correct Wrong </td>
-                <td id="wrong-ans"> 0</td>
+                <td>Total Wrong Answers</td>
+                <td id="wrong-ans">0</td>
             </tr>
         </table>
         <h2>Solve this question</h2>
         <h1 id="question-id">3 - 3</h1>
         <h2 id="timer">?</h2>
-        <h2 id="answer-display"> Find</h2> <img id="image-id" alt="answer"><br /><br />
-        <input id="answer-id" type="number" placeholder="write your answer here">
-        <input id="btn" type="submit" value="check">
-
-
+        <h2 id="answer-display">Find</h2>
+        <img id="image-id" alt="answer"><br /><br />
+        <input id="answer-id" type="number" placeholder="Write your answer here">
+        <input id="btn" type="submit" value="Check">
     </div>
-
 
     <script src="display.js"></script>
 </body>
