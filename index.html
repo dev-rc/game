@@ -1,104 +1,189 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="display.css">
-    <title>Document</title>
+    <meta charset="UTF-8">
+    <title>Math Game</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
-        @media only screen and (max-width: 600px) {
-            /* Styles for mobile */
-            body {
-                font-size: 14px;
-            }
-            .mylist {
-                text-align: center;
-            }
-            .mylist li {
-                display: block;
-                margin-bottom: 10px;
-            }
-            .rightAlign {
-                text-align: center;
-            }
-            .center-pos {
-                text-align: center;
-            }
-            .center-pos table {
-                margin: 0 auto;
-            }
-            #answer-id {
-                width: 100%;
-            }
-        }
-        
-        @media only screen and (min-width: 601px) {
-            /* Styles for desktop */
-            body {
-                font-size: 16px;
-            }
-            .mylist {
-                text-align: left;
-            }
-            .mylist li {
-                display: inline-block;
-                margin-right: 10px;
-            }
-            .rightAlign {
-                text-align: right;
-            }
-            .center-pos {
-                text-align: center;
-            }
-            .center-pos table {
-                margin: 0 auto;
-            }
-            #answer-id {
-                width: auto;
-            }
+        .container {
+            max-width: 400px;
+            margin-top: 50px;
         }
     </style>
 </head>
-
 <body>
-    <nav>
-        <ul class="mylist">
-            <li class="leftAlign">
-                <form action="">
-                    <label for="bgl" class="white">Beginner</label>
-                    <input type="radio" name="level" id="bgl" value="beginner">
-                    <label for="inl" class="white">Intermediate</label>
-                    <input type="radio" name="level" id="inl" value="intermediate">
-                    <label for="adl" class="white">Advanced</label>
-                    <input type="radio" name="level" id="adl" value="advanced">
-                </form>
-            </li>
-            <li class="white rightAlign">Home</li>
-            <li class="white rightAlign">Open Source</li>
-            <li class="white rightAlign">About</li>
-        </ul>
-    </nav>
-    <div class="center-pos">
-        <table>
-            <tr>
-                <td>Total Correct Answers</td>
-                <td id="correct-ans">0</td>
-            </tr>
-            <tr>
-                <td>Total Wrong Answers</td>
-                <td id="wrong-ans">0</td>
-            </tr>
-        </table>
-        <h2>Solve this question</h2>
-        <h1 id="question-id">3 - 3</h1>
-        <h2 id="timer">?</h2>
-        <h2 id="answer-display">Find</h2>
-        <img id="image-id" alt="answer"><br /><br />
-        <input id="answer-id" type="number" placeholder="Write your answer here">
-        <input id="btn" type="submit" value="Check">
+    <div class="container">
+        <div class="text-center">
+            <h1>Math Game</h1>
+            <div class="mb-3">
+                <label>Choose Operation:</label>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary operation" data-operation="add">+</button>
+                    <button type="button" class="btn btn-primary operation" data-operation="subtract">-</button>
+                    <button type="button" class="btn btn-primary operation" data-operation="multiply">*</button>
+                    <button type="button" class="btn btn-primary operation" data-operation="divide">/</button>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label>Choose Difficulty:</label>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary difficulty" data-difficulty="easy">Easy</button>
+                    <button type="button" class="btn btn-primary difficulty" data-difficulty="hard">Hard</button>
+                </div>
+            </div>
+            <div>
+                <p id="question" class="lead"></p>
+                <div class="form-group">
+                    <input type="number" class="form-control" id="answer" placeholder="Enter answer">
+                </div>
+                <button type="button" class="btn btn-primary" id="check">Check</button>
+                <div class="mt-3">
+                    <span>Correct: <span id="correct-count">0</span></span>
+                    <span class="ml-3">Wrong: <span id="wrong-count">0</span></span>
+                </div>
+                <div id="result" class="mt-3"></div>
+                <div class="mt-3">
+                    <span id="timer">0</span> seconds remaining
+                </div>
+            </div>
+        </div>
     </div>
 
-    <script src="display.js"></script>
-</body>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+        var correctCount = 0;
+        var wrongCount = 0;
+        var operation = "add";
+        var difficulty = "easy";
+        var timerDuration = 30; // Default timer duration for easy difficulty
+        var timerInterval;
 
+        $(".operation").click(function () {
+            operation = $(this).data("operation");
+            generateQuestion();
+        });
+
+        $(".difficulty").click(function () {
+            difficulty = $(this).data("difficulty");
+            if (difficulty === "hard") {
+                timerDuration = 10;
+            } else {
+                timerDuration = 30;
+            }
+            generateQuestion();
+        });
+
+        $("#check").click(function () {
+            var answer = parseInt($("#answer").val());
+            var evaluation = evaluateAnswer(answer);
+            var result;
+
+            if (evaluation === true) {
+                result = '<span class="text-success">Correct! Well done.</span>';
+                correctCount++;
+            } else {
+                result = '<span class="text-danger">Wrong! Try again.</span>';
+                wrongCount++;
+            }
+
+            $("#result").html(result);
+            $("#correct-count").text(correctCount);
+            $("#wrong-count").text(wrongCount);
+
+            clearTimeout(timerInterval);
+            generateQuestion();
+        });
+
+        function generateQuestion() {
+            var num1, num2;
+            if (difficulty === "easy") {
+                num1 = getRandomNumber(1, 10);
+                num2 = getRandomNumber(1, 10);
+                clearTimeout(timerInterval);
+                startTimer();
+            } else {
+                num1 = getRandomNumber(10, 100);
+                num2 = getRandomNumber(10, 100);
+                clearTimeout(timerInterval);
+                startTimer();
+            }
+
+            var question = num1 + " " + getOperationSymbol(operation) + " " + num2;
+            $("#question").text(question);
+            $("#answer").val("");
+            $("#result").html("");
+        }
+
+        function evaluateAnswer(answer) {
+            var num1 = parseInt($("#question").text().split(" ")[0]);
+            var num2 = parseInt($("#question").text().split(" ")[2]);
+            var expectedAnswer;
+
+            switch (operation) {
+                case "add":
+                    expectedAnswer = num1 + num2;
+                    break;
+                case "subtract":
+                    expectedAnswer = num1 - num2;
+                    break;
+                case "multiply":
+                    expectedAnswer = num1 * num2;
+                    break;
+                case "divide":
+                    expectedAnswer = num1 / num2;
+                    break;
+                default:
+                    expectedAnswer = 0;
+            }
+
+            return answer === expectedAnswer;
+        }
+
+        function getOperationSymbol(operation) {
+            switch (operation) {
+                case "add":
+                    return "+";
+                case "subtract":
+                    return "-";
+                case "multiply":
+                    return "*";
+                case "divide":
+                    return "/";
+                default:
+                    return "";
+            }
+        }
+
+        function getRandomNumber(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function startTimer() {
+            var timerElement = $("#timer");
+            var remainingTime = timerDuration;
+
+            timerInterval = setInterval(function () {
+                remainingTime--;
+                timerElement.text(remainingTime);
+
+                if (remainingTime <= 0) {
+                    handleTimeout();
+                    clearInterval(timerInterval);
+                }
+            }, 1000);
+        }
+
+        function handleTimeout() {
+            $("#result").html('<span class="text-danger">Time\'s up! Try the next question.</span>');
+            $("#answer").val(""); // Clear the answer field
+            wrongCount++;
+            $("#wrong-count").text(wrongCount);
+            generateQuestion();
+        }
+
+        // Initial question generation
+        generateQuestion();
+    </script>
+</body>
 </html>
